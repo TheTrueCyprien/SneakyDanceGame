@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class enemy_control : MonoBehaviour {
 
-    char[] route = new char[] { };
+    public string route;
+    char[] route_array = new char[] { };
     private Transform player_t;
     private BoxCollider2D player_c;
 
@@ -17,7 +18,7 @@ public class enemy_control : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        route = new char[] {'d', 'r', 'u', 'l'};
+        route_array = route.ToCharArray();
 
         player_t = GetComponent<Transform>();
         player_c = GetComponent<BoxCollider2D>();
@@ -29,12 +30,15 @@ public class enemy_control : MonoBehaviour {
         if (Time.time >= nextTime)
         {
             Vector3 velocity = new Vector3(0, 0, 0);
+            Vector3 rotation = new Vector3(0, 0, 0);
 
             RaycastHit2D[] results = new RaycastHit2D[1];
 
             if (route[pattern_count] == 'd')
             {
                 velocity = new Vector3(0, -1.0f * tileSize, 0);
+                rotation = new Vector3(0, 0, 0);
+                rotation = rotation - player_t.rotation.eulerAngles;
 
                 results = new RaycastHit2D[1];
                 player_c.Raycast(new Vector2(0, -1.0f * tileSize), results, tileSize);
@@ -42,6 +46,8 @@ public class enemy_control : MonoBehaviour {
             else if (route[pattern_count] == 'u')
             {
                 velocity = new Vector3(0, 1.0f * tileSize, 0);
+                rotation = new Vector3(0, 0, 180);
+                rotation = rotation - player_t.rotation.eulerAngles;
 
                 results = new RaycastHit2D[1];
                 player_c.Raycast(new Vector2(0, 1.0f * tileSize), results, tileSize);
@@ -49,6 +55,8 @@ public class enemy_control : MonoBehaviour {
             else if (route[pattern_count] == 'l') 
             {
                 velocity = new Vector3(-1.0f * tileSize, 0, 0);
+                rotation = new Vector3(0, 0, 270);
+                rotation = rotation - player_t.rotation.eulerAngles;
 
                 results = new RaycastHit2D[1];
                 player_c.Raycast(new Vector2(-1.0f * tileSize,0), results, tileSize);
@@ -56,6 +64,8 @@ public class enemy_control : MonoBehaviour {
             else if (route[pattern_count] == 'r')
             {
                 velocity = new Vector3(1.0f * tileSize, 0, 0);
+                rotation = new Vector3(0, 0, 90);
+                rotation = rotation - player_t.rotation.eulerAngles;
 
                 results = new RaycastHit2D[1];
                 player_c.Raycast(new Vector2(1.0f * tileSize, 0), results, tileSize);
@@ -64,6 +74,7 @@ public class enemy_control : MonoBehaviour {
             if (results[0].collider == null)
             {
                 player_t.position += velocity;
+                player_t.Rotate(rotation,Space.World);
                 if (pattern_count < route.Length-1)
                 {
                     pattern_count++;
