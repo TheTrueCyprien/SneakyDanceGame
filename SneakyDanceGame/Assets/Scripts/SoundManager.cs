@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SoundManager : MonoBehaviour {
 
+    public GameObject[] Listeners;
+
     //the current position of the song (in seconds)
-    float songPosition;
+    private float songPosition;
 
     //the current position of the song (in beats)
-    float songPosInBeats;
+    private float songPosInBeats;
 
     //the duration of a beat
     float secPerBeat;
@@ -17,13 +20,13 @@ public class SoundManager : MonoBehaviour {
     float dsptimesong;
 
     //beats per minute of a song
-    float bpm = 100;
+    public float bpm = 100;
 
     //keep all the position-in-beats of notes in the song
-    float[] notes;
+    private float[] notes;
 
-    //the index of the next note to be spawned
-    int nextIndex = 0;
+    //beatsteps at which an update is triggered
+    private int nextIndex = 0;
 
     // Use this for initialization
     void Start () {
@@ -47,8 +50,9 @@ public class SoundManager : MonoBehaviour {
 
         if (songPosInBeats > nextIndex)
         {
-            GetComponentInChildren<Renderer>().material.color = new Color(255*(1-nextIndex%2), 0, 255*(nextIndex%2));
-
+            foreach(GameObject Listener in Listeners) {
+                ExecuteEvents.Execute<IRythmMessageTarget>(Listener, null, (x, y) => x.OnBeat(nextIndex));
+            }
             nextIndex++;
         }
     }
