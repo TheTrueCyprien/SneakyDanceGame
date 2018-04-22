@@ -38,6 +38,11 @@ public class SoundManager : MonoBehaviour {
 
         //start the song
         GetComponent<AudioSource>().Play();
+
+        foreach (GameObject Listener in Listeners)
+        {
+            ExecuteEvents.Execute<IRythmMessageTarget>(Listener, null, (x, y) => x.SongStarted(secPerBeat));
+        }
     }
 	
 	// Update is called once per frame

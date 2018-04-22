@@ -9,4 +9,5 @@ public class ExampleListener : MonoBehaviour, IRythmMessageTarget {
 
     }
 
+    public void SongStarted(float secPerBeat) { }
 }

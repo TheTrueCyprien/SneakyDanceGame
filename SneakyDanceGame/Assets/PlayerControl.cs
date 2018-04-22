@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class PlayerControl : MonoBehaviour {
+public class PlayerControl : MonoBehaviour, IRythmMessageTarget
+{
 
     private Transform player_t;
     private BoxCollider2D player_c;
+    private float lastBeatTime;
+    private float beatDeltaTime;
+    private bool beatSkipped = true;
+    private bool comboVerified = false;
+    private int combo = 0;
 
-    private float tileSize = 32.0f;
-    
+    public float tileSize = 32.0f;
+    public float offbeatTolerance = 0.15f;
 
 	// Use this for initialization
 	void Start () {
@@ -20,7 +26,17 @@ public class PlayerControl : MonoBehaviour {
 
         if (Input.GetButtonDown("Horizontal"))
         {
-
+            beatSkipped = false;
+            if (isOffBeat())
+            {
+                Debug.Log("Off beat!");
+                combo = 0;
+            }
+            else
+            {
+                combo++;
+                Debug.Log(string.Format("Combo {0}", combo));
+            }
 
             float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
 
@@ -47,6 +63,18 @@ public class PlayerControl : MonoBehaviour {
 
         else if (Input.GetButtonDown("Vertical"))
         {
+            beatSkipped = false;
+            if (isOffBeat())
+            {
+                Debug.Log("Off beat!");
+                combo = 0;
+            }
+            else
+            {
+                combo++;
+                Debug.Log(string.Format("Combo {0}", combo));
+            }
+
             float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
 
             if (moveVertical > 0)
@@ -67,5 +95,34 @@ public class PlayerControl : MonoBehaviour {
                 player_t.position += velocity;
             }
         }
+
+
+        if (combo > 0 && !comboVerified && (Time.time - lastBeatTime > beatDeltaTime * offbeatTolerance)) {
+            if (beatSkipped)
+            {
+                combo = 0;
+                Debug.Log("Combo dropped");
+            }
+            comboVerified = true;
+            beatSkipped = true;
+        }
+    }
+
+    private bool isOffBeat() {
+        float timing = Time.time - lastBeatTime;
+        float offbeat = Mathf.Min(timing, Mathf.Abs(timing - beatDeltaTime));
+        Debug.Log(offbeat / beatDeltaTime > offbeatTolerance);
+        return (offbeat / beatDeltaTime) > offbeatTolerance;
+    }
+
+    public void OnBeat(int index)
+    {
+        lastBeatTime = Time.time;
+        comboVerified = false;
+    }
+
+    public void SongStarted(float secPerBeat)
+    {
+        beatDeltaTime = secPerBeat;
     }
 }
