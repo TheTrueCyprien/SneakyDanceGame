@@ -10,7 +10,6 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     private float beatDeltaTime;
     private bool beatSkipped = true;
     private bool comboVerified = false;
-    private int combo = 0;
 
     public float tileSize = 32.0f;
     public float offbeatTolerance = 0.15f;
@@ -29,13 +28,11 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             beatSkipped = false;
             if (isOffBeat())
             {
-                Debug.Log("Off beat!");
-                combo = 0;
+                UIManager.instance.DropCombo();
             }
             else
             {
-                combo++;
-                Debug.Log(string.Format("Combo {0}", combo));
+                UIManager.instance.IncrementCombo();
             }
 
             float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
@@ -77,13 +74,11 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             beatSkipped = false;
             if (isOffBeat())
             {
-                Debug.Log("Off beat!");
-                combo = 0;
+                UIManager.instance.DropCombo();
             }
             else
             {
-                combo++;
-                Debug.Log(string.Format("Combo {0}", combo));
+                UIManager.instance.IncrementCombo();
             }
 
             float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
@@ -120,11 +115,10 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
         }
 
 
-        if (combo > 0 && !comboVerified && (Time.time - lastBeatTime > beatDeltaTime * offbeatTolerance)) {
+        if (UIManager.instance.combo > 0 && !comboVerified && (Time.time - lastBeatTime > beatDeltaTime * offbeatTolerance)) {
             if (beatSkipped)
             {
-                combo = 0;
-                Debug.Log("Combo dropped");
+                UIManager.instance.DropCombo();
             }
             comboVerified = true;
             beatSkipped = true;
