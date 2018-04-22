@@ -31,7 +31,10 @@ public class AudioController : MonoBehaviour {
 	void Update () {
 		if (Input.GetButtonDown("Fire1")) {
 			if (LayerCounter < aLayers.Length) {
-				fadeInQueue.Add(aLayers[LayerCounter++]);
+				aLayers[LayerCounter].Play();
+				aLayers [LayerCounter].timeSamples = MasterBeat.timeSamples;
+				fadeInQueue.Add(aLayers[LayerCounter]);
+				LayerCounter++;
 			}
 		}
 		else if (Input.GetButtonDown("Fire2")) {
@@ -59,6 +62,7 @@ public class AudioController : MonoBehaviour {
 				item.volume = Mathf.Max( item.volume - 0.5f * Time.deltaTime, 0f );
 			} else if (item.volume == 0f) {
 				fadeOutQueue.Remove(item);
+				item.Stop();
 			}
 		}
 	}

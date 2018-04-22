@@ -40,7 +40,6 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 
             float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
 
-
             if (moveHorizontal > 0)
             {
                 moveHorizontal = 1.0f;
@@ -52,12 +51,24 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 
             Vector3 velocity = new Vector3(tileSize * moveHorizontal, 0, 0);
 
-            RaycastHit2D[] results = new RaycastHit2D[1];
+            RaycastHit2D[] results = new RaycastHit2D[4];
             player_c.Raycast(new Vector2(moveHorizontal, 0),results,tileSize);
 
-            if (results[0].collider == null)
+            bool collision = false;
+            foreach (RaycastHit2D hit in results)
             {
-            player_t.position += velocity;
+                if (hit.collider != null)
+                {
+                    if (!hit.collider.gameObject.CompareTag("SightCone"))
+                    {
+                        collision = true;
+                    }
+                }
+            }
+
+            if (!collision)
+            {
+                player_t.position += velocity;
             }
         }
 
@@ -87,10 +98,22 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             }
             Vector3 velocity = new Vector3(0, tileSize * moveVertical, 0);
 
-            RaycastHit2D[] results = new RaycastHit2D[1];
+            RaycastHit2D[] results = new RaycastHit2D[4];
             player_c.Raycast(new Vector2(0,moveVertical), results, tileSize);
 
-            if (results[0].collider == null)
+            bool collision = false;
+            foreach (RaycastHit2D hit in results)
+            {
+                if (hit.collider != null)
+                {
+                    if (!hit.collider.gameObject.CompareTag("SightCone"))
+                    {
+                        collision = true;
+                    }
+                }
+            }
+
+            if (!collision)
             {
                 player_t.position += velocity;
             }
