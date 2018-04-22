@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class enemy_control : MonoBehaviour, OnConeCollision {
+public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget {
 
     public string route;
     char[] route_array = new char[] { };
     private Transform npc_t;
     private BoxCollider2D npc_c;
-    private BoxCollider2D npc_cone;
+    private Transform npc_cone;
+    private Animator npc_anim;
 
     int interval = 1;
     float nextTime = 1;
     int pattern_count = 0;
 
     private float tileSize = 32.0f;
+    private float secPerBeat;
 
 
     // Use this for initialization
@@ -23,17 +25,39 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
 
         npc_t = GetComponent<Transform>();
         npc_c = GetComponent<BoxCollider2D>();
+        npc_anim = GetComponent<Animator>();
+
+        foreach (Transform child in GetComponentsInChildren<Transform>()) if (child.CompareTag("SightCone")) {
+                npc_cone = child;
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Time.time >= nextTime)
-        {
-            MoveRoute();
+        AnimationClip current_anim = npc_anim.GetCurrentAnimatorClipInfo(0)[0].clip;
+        npc_anim.speed = current_anim.length / secPerBeat;
+    }
 
-            nextTime += interval;
+    public void SongStarted(float beatDelta) {
+        secPerBeat = beatDelta;
+    }
+
+    public void OnBeat(int index) {
+        MoveRoute();   
+    }
+
+    void setAnimation(string trigger) {
+        foreach (string animation in new string[] { "MoveLeft", "MoveLeft", "MoveLeft", "MoveLeft" })
+        {
+            if (animation == trigger) {
+                npc_anim.SetTrigger(trigger);
+            }
+            else {
+                npc_anim.ResetTrigger(animation);
+            }
+
         }
-	}
+    }
 
     void MoveRoute()
     {
@@ -46,7 +70,9 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
         {
             velocity = new Vector3(0, -1.0f * tileSize, 0);
             rotation = new Vector3(0, 0, 0);
-            rotation = rotation - npc_t.rotation.eulerAngles;
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(0, -32, 0);
+            npc_anim.SetTrigger("MoveDown");
 
             npc_c.Raycast(new Vector2(0, -1.0f), results, tileSize);
         }
@@ -54,7 +80,9 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
         {
             velocity = new Vector3(0, 1.0f * tileSize, 0);
             rotation = new Vector3(0, 0, 180);
-            rotation = rotation - npc_t.rotation.eulerAngles;
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(0, 32, 0);
+            npc_anim.SetTrigger("MoveUp");
 
             npc_c.Raycast(new Vector2(0, 1.0f), results, tileSize);
         }
@@ -62,7 +90,9 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
         {
             velocity = new Vector3(-1.0f * tileSize, 0, 0);
             rotation = new Vector3(0, 0, 270);
-            rotation = rotation - npc_t.rotation.eulerAngles;
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(-32, 0, 0);
+            npc_anim.SetTrigger("MoveLeft");
 
             npc_c.Raycast(new Vector2(-1.0f, 0), results, tileSize);
         }
@@ -70,35 +100,43 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
         {
             velocity = new Vector3(1.0f * tileSize, 0, 0);
             rotation = new Vector3(0, 0, 90);
-            rotation = rotation - npc_t.rotation.eulerAngles;
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(32, 0, 0);
 
             npc_c.Raycast(new Vector2(1.0f, 0), results, tileSize);
+            npc_anim.SetTrigger("MoveRight");
         }
 
-        bool collision = false;
-        foreach (RaycastHit2D hit in results)
+        if (rotation == Vector3.zero)
         {
-            if (hit.collider != null)
+            bool collision = false;
+            foreach (RaycastHit2D hit in results)
             {
-                if (!hit.collider.gameObject.CompareTag("SightCone"))
+                if (hit.collider != null)
                 {
-                    collision = true;
+                    if (!hit.collider.gameObject.CompareTag("SightCone"))
+                    {
+                        collision = true;
+                    }
+                }
+            }
+
+            if (!collision)
+            {
+                npc_t.position += velocity;                
+                if (pattern_count < route.Length - 1)
+                {
+                    pattern_count++;
+                }
+                else
+                {
+                    pattern_count = 0;
                 }
             }
         }
-
-        if (!collision)
+        else
         {
-            npc_t.position += velocity;
-            npc_t.Rotate(rotation, Space.World);
-            if (pattern_count < route.Length - 1)
-            {
-                pattern_count++;
-            }
-            else
-            {
-                pattern_count = 0;
-            }
+            npc_cone.Rotate(rotation, Space.World);
         }
     }
 
