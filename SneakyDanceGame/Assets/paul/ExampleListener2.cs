@@ -24,6 +24,8 @@ public class ExampleListener2 : MonoBehaviour, IRythmMessageTarget {
 		player_c = GetComponent<BoxCollider2D>();
 	}
 
+    public void SongStarted(float secPerBeat) { }
+
     public void OnBeat(int index) {
         GetComponent<Renderer>().material.color = new Color(255 * (1 - index % 2), 0, 255 * (index % 2));
 
