@@ -6,6 +6,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 
     private Transform player_t;
     private BoxCollider2D player_c;
+    private Animator player_anim;
     private float lastBeatTime;
     private float beatDeltaTime;
     private bool beatSkipped = true;
@@ -18,7 +19,9 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 	void Start () {
         player_t = GetComponent<Transform>();
         player_c = GetComponent<BoxCollider2D>();
-	}
+        player_anim = GetComponent<Animator>();
+
+    }
 
     // Update is called once per frame
     void Update () {
@@ -128,7 +131,6 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     private bool isOffBeat() {
         float timing = Time.time - lastBeatTime;
         float offbeat = Mathf.Min(timing, Mathf.Abs(timing - beatDeltaTime));
-        Debug.Log(offbeat / beatDeltaTime > offbeatTolerance);
         return (offbeat / beatDeltaTime) > offbeatTolerance;
     }
 
@@ -141,5 +143,8 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     public void SongStarted(float secPerBeat)
     {
         beatDeltaTime = secPerBeat;
+        // AnimatorClipInfo test = player_anim.GetCurrentAnimatorClipInfo(0)[0];
+        // test.clip.length;
+        // player_anim.speed = secPerBeat / 2;
     }
 }

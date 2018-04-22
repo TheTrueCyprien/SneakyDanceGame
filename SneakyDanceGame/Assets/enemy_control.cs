@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class enemy_control : MonoBehaviour, OnConeCollision {
+public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget {
 
     public string route;
     char[] route_array = new char[] { };
@@ -27,13 +27,13 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Time.time >= nextTime)
-        {
-            MoveRoute();
-
-            nextTime += interval;
-        }
 	}
+
+    public void SongStarted(float sec) { }
+
+    public void OnBeat(int index) {
+        MoveRoute();
+    }
 
     void MoveRoute()
     {
@@ -75,30 +75,36 @@ public class enemy_control : MonoBehaviour, OnConeCollision {
             npc_c.Raycast(new Vector2(1.0f, 0), results, tileSize);
         }
 
-        bool collision = false;
-        foreach (RaycastHit2D hit in results)
+        if (rotation == Vector3.zero)
         {
-            if (hit.collider != null)
+            bool collision = false;
+            foreach (RaycastHit2D hit in results)
             {
-                if (!hit.collider.gameObject.CompareTag("SightCone"))
+                if (hit.collider != null)
                 {
-                    collision = true;
+                    if (!hit.collider.gameObject.CompareTag("SightCone"))
+                    {
+                        collision = true;
+                    }
+                }
+            }
+
+            if (!collision)
+            {
+                npc_t.position += velocity;                
+                if (pattern_count < route.Length - 1)
+                {
+                    pattern_count++;
+                }
+                else
+                {
+                    pattern_count = 0;
                 }
             }
         }
-
-        if (!collision)
+        else
         {
-            npc_t.position += velocity;
             npc_t.Rotate(rotation, Space.World);
-            if (pattern_count < route.Length - 1)
-            {
-                pattern_count++;
-            }
-            else
-            {
-                pattern_count = 0;
-            }
         }
     }
 
