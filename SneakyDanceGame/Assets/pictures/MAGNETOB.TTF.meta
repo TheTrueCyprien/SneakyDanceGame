@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: a004b8d4a345eb9449b618a4bd044f3b
-timeCreated: 1524393349
+guid: 2c869f9cea34e224c8f659e6746b8797
+timeCreated: 1524405740
 licenseType: Free
 TrueTypeFontImporter:
   externalObjects: {}
@@ -10,9 +10,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Bauhaus 93
+  fontName: Magneto
   fontNames:
-  - Bauhaus 93
+  - Magneto
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

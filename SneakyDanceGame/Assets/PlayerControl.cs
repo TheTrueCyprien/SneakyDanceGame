@@ -136,6 +136,9 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 
     public void OnBeat(int index)
     {
+        AnimationClip current_anim = player_anim.GetCurrentAnimatorClipInfo(0)[0].clip;
+        float stepsize = 1f/(current_anim.frameRate * current_anim.length);
+        player_anim.SetFloat("normalTime", (player_anim.GetFloat("normalTime") + stepsize) % 1f);
         lastBeatTime = Time.time;
         comboVerified = false;
     }
@@ -143,8 +146,5 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     public void SongStarted(float secPerBeat)
     {
         beatDeltaTime = secPerBeat;
-        // AnimatorClipInfo test = player_anim.GetCurrentAnimatorClipInfo(0)[0];
-        // test.clip.length;
-        // player_anim.speed = secPerBeat / 2;
     }
 }

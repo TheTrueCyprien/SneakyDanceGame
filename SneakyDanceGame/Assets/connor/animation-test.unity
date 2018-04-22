@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 57763854}
   - component: {fileID: 57763853}
   - component: {fileID: 57763856}
+  - component: {fileID: 57763857}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -167,7 +168,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 50d9b32fa8e5b4e4eb37f6798f0b3350, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 74cb36e31f7db0147aa720cfe1462b41, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -219,8 +220,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 32, y: 32}
+    pivot: {x: 0.5, y: 0.1}
+    oldSize: {x: 50, y: 80}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -266,6 +267,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &57763857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 57763850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 448e8112ef37da44ba77c7d6464364b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &293427487
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,6 +409,8 @@ GameObject:
   - component: {fileID: 346585309}
   - component: {fileID: 346585308}
   - component: {fileID: 346585311}
+  - component: {fileID: 346585312}
+  - component: {fileID: 346585313}
   m_Layer: 0
   m_Name: obstacle
   m_TagString: Untagged
@@ -419,8 +433,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 32, y: 32}
+    pivot: {x: 0.5, y: 0.1}
+    oldSize: {x: 80, y: 91}
     newSize: {x: 32, y: 32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -463,7 +477,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: db37c84bc3b4ede4c898efc429a19614, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 677fae60702e8e648bd884c2fee18c1b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -499,6 +513,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   route: ddrruull
+--- !u!95 &346585312
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 346585307}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 19d7da79ba5a7b94d9521d834565a7b6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &346585313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 346585307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 448e8112ef37da44ba77c7d6464364b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &422211556
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +596,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: a004b8d4a345eb9449b618a4bd044f3b, type: 3}
+    m_Font: {fileID: 12800000, guid: 2c869f9cea34e224c8f659e6746b8797, type: 3}
     m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
@@ -2287,7 +2329,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1000
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
