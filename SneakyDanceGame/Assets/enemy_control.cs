@@ -47,7 +47,7 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
     }
 
     void setAnimation(string trigger) {
-        foreach (string animation in new string[] { "MoveLeft", "MoveLeft", "MoveLeft", "MoveLeft" })
+        foreach (string animation in new string[] { "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "IdleLeft", "IdleRight", "IdleUp", "IdleDown" })
         {
             if (animation == trigger) {
                 npc_anim.SetTrigger(trigger);
@@ -105,39 +105,61 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
 
             npc_c.Raycast(new Vector2(1.0f, 0), results, tileSize);
             npc_anim.SetTrigger("MoveRight");
+        } else if (route[pattern_count] == '2')
+        {
+            rotation = new Vector3(0, 0, 0);
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(0, -32, 0);
+            npc_anim.SetTrigger("IdleDown");
+        }
+        else if (route[pattern_count] == '8')
+        {
+            rotation = new Vector3(0, 0, 180);
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(0, 32, 0);
+            npc_anim.SetTrigger("IdleUp");
+        }
+        else if (route[pattern_count] == '4')
+        {
+            rotation = new Vector3(0, 0, 270);
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(-32, 0, 0);
+            npc_anim.SetTrigger("IdleLeft");
+        }
+        else if (route[pattern_count] == '6')
+        {
+            rotation = new Vector3(0, 0, 90);
+            rotation = rotation - npc_cone.rotation.eulerAngles;
+            npc_cone.localPosition = new Vector3(32, 0, 0);
+            npc_anim.SetTrigger("IdleRight");
         }
 
-        if (rotation == Vector3.zero)
+        npc_cone.Rotate(rotation, Space.World);
+        bool collision = false;
+        foreach (RaycastHit2D hit in results)
         {
-            bool collision = false;
-            foreach (RaycastHit2D hit in results)
+            if (hit.collider != null)
             {
-                if (hit.collider != null)
+                if (!hit.collider.gameObject.CompareTag("SightCone"))
                 {
-                    if (!hit.collider.gameObject.CompareTag("SightCone"))
-                    {
-                        collision = true;
+                    collision = true;
+                }
+            }
+        }
+
+        if (!collision)
+        {
+            npc_t.position += velocity;                
+            if (pattern_count < route.Length - 1)
+            {
+                pattern_count++;
                     }
-                }
-            }
-
-            if (!collision)
+            else
             {
-                npc_t.position += velocity;                
-                if (pattern_count < route.Length - 1)
-                {
-                    pattern_count++;
-                }
-                else
-                {
-                    pattern_count = 0;
-                }
+                pattern_count = 0;
             }
         }
-        else
-        {
-            npc_cone.Rotate(rotation, Space.World);
-        }
+
     }
 
     public void OnConeCollision(Collision2D collision)
