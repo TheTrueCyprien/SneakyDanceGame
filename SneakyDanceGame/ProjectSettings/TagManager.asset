@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - SightCone
   - Master-Audio
+  - AudioController
   layers:
   - Default
   - TransparentFX
