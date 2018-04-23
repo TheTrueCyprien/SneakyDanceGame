@@ -62,6 +62,8 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
                     if (!hit.collider.gameObject.CompareTag("SightCone"))
                     {
                         collision = true;
+                        UIManager.instance.DropCombo();
+                        break;
                     }
                 }
             }
@@ -107,6 +109,8 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
                     if (!hit.collider.gameObject.CompareTag("SightCone"))
                     {
                         collision = true;
+                        UIManager.instance.DropCombo();
+                        break;
                     }
                 }
             }
