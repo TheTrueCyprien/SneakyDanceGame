@@ -42,16 +42,19 @@ public class UIManager : MonoBehaviour, IRythmMessageTarget
         switch (combo)
         {
             case 25:
+                SoundManager.instance.fadeInChannel(0);
                 comboDescription.gameObject.SetActive(true);
                 comboDescription.text = "Damn";
                 break;
             case 50:
+                SoundManager.instance.fadeInChannel(1);
                 comboDescription.text = "Cool";
                 break;
             case 75:
                 comboDescription.text = "Beautiful";
                 break;
             case 100:
+                SoundManager.instance.fadeInChannel(2);
                 comboDescription.text = "Amazing";
                 break;
             case 150:
@@ -63,6 +66,17 @@ public class UIManager : MonoBehaviour, IRythmMessageTarget
     public void DropCombo() {
         comboText.gameObject.SetActive(false);
         comboDescription.gameObject.SetActive(false);
+        if (combo >= 25) {
+            SoundManager.instance.fadeOutChannel(0);
+            if (combo >= 50)
+            {
+                SoundManager.instance.fadeOutChannel(1);
+                if (combo >= 100)
+                {
+                    SoundManager.instance.fadeOutChannel(2);
+                }
+            }
+        }
         combo = 0;
     }
 

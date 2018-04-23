@@ -11,8 +11,6 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
     private Transform npc_cone;
     private Animator npc_anim;
 
-    int interval = 1;
-    float nextTime = 1;
     int pattern_count = 0;
 
     private float tileSize = 32.0f;

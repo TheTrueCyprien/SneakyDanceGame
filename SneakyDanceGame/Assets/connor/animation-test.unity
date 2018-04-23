@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 487532822}
   m_Layer: 0
   m_Name: Channel2
-  m_TagString: Untagged
+  m_TagString: AudioChannel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -880,7 +880,7 @@ GameObject:
   - component: {fileID: 591820026}
   m_Layer: 0
   m_Name: Channel3
-  m_TagString: Untagged
+  m_TagString: AudioChannel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -896,7 +896,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: de6b76396782d0d4ebfee0c1e4d28aff, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1964,7 +1964,7 @@ GameObject:
   - component: {fileID: 852636621}
   m_Layer: 0
   m_Name: Channel1
-  m_TagString: Untagged
+  m_TagString: AudioChannel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2458,11 +2458,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1766924948}
-  - component: {fileID: 1766924949}
-  - component: {fileID: 1766924950}
   - component: {fileID: 1766924951}
+  - component: {fileID: 1766924949}
   m_Layer: 0
-  m_Name: AudioController
+  m_Name: SoundManager
   m_TagString: AudioController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2493,31 +2492,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1766924947}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44e21ad258daf7c49923be1c2441df2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MasterBeat: {fileID: 1223226376}
-  Layer1: {fileID: 852636621}
-  Layer2: {fileID: 487532822}
-  Layer3: {fileID: 591820026}
---- !u!114 &1766924950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1766924947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e57c17ce0bcb2149bc3564a011b56cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Listeners:
-  - {fileID: 1829109309}
   - {fileID: 57763850}
   - {fileID: 1980208585}
   - {fileID: 2108982493}
   - {fileID: 1905868928}
   - {fileID: 346585307}
+  - {fileID: 1829109309}
+  aLayers:
+  - {fileID: 852636621}
+  - {fileID: 487532822}
+  - {fileID: 591820026}
   bpm: 100
 --- !u!82 &1766924951
 AudioSource:

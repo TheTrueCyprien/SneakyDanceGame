@@ -9,6 +9,11 @@ public class SoundManager : MonoBehaviour {
 
     public List<GameObject> Listeners;
 
+    private AudioSource MasterBeat;
+    private List<AudioSource> aLayers;
+    private List<AudioSource> fadeInQueue;
+    private List<AudioSource> fadeOutQueue;
+
     //the current position of the song (in seconds)
     private float songPosition;
 
@@ -41,6 +46,16 @@ public class SoundManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        aLayers = new List<AudioSource>();
+        fadeInQueue = new List<AudioSource>();
+        fadeOutQueue = new List<AudioSource>();
+
+        foreach (AudioSource layer in GetComponentsInChildren<AudioSource>()) if (layer.CompareTag("AudioChannel"))
+            {
+                layer.volume = 0f;
+                aLayers.Add(layer);
+            }
+
         //calculate how many seconds is one beat
         secPerBeat = 60f / bpm;
 
@@ -50,6 +65,7 @@ public class SoundManager : MonoBehaviour {
         //start the song
         foreach (AudioSource child in GetComponentsInChildren<AudioSource>()) if (child.CompareTag("Master-Audio"))
             {
+                MasterBeat = child;
                 child.Play();
             }
 
@@ -74,9 +90,50 @@ public class SoundManager : MonoBehaviour {
             }
             nextIndex++;
         }
+        handleQueues();
     }
 
     public void failSound() {
         GetComponent<AudioSource>().Play();
+    }
+
+    public void fadeInChannel(int n) {
+        aLayers[n].Play();
+        aLayers[n].timeSamples = MasterBeat.timeSamples;
+        fadeInQueue.Add(aLayers[n]);
+    }
+
+    public void fadeOutChannel(int n) {
+        fadeOutQueue.Add(aLayers[n]);
+    }
+
+    void handleQueues()
+    {
+        for (int i = 0; i < fadeInQueue.Count; i++)
+        {
+            AudioSource item = fadeInQueue[i];
+            if (item.volume < 1f)
+            {
+                item.volume = Mathf.Min(item.volume + 0.5f * Time.deltaTime, 1f);
+            }
+            else if (item.volume == 1f)
+            {
+                fadeInQueue.Remove(item);
+            }
+        }
+
+        for (int i = 0; i < fadeOutQueue.Count; i++)
+        {
+            AudioSource item = fadeOutQueue[i];
+            if (item.volume > 0f)
+            {
+                item.volume = Mathf.Max(item.volume - 0.5f * Time.deltaTime, 0f);
+            }
+            else if (item.volume == 0f)
+            {
+                fadeOutQueue.Remove(item);
+                item.Stop();
+            }
+        }
     }
 }
