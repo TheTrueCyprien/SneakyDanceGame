@@ -1963,8 +1963,9 @@ GameObject:
   - component: {fileID: 820681650}
   - component: {fileID: 820681649}
   - component: {fileID: 820681648}
-  - component: {fileID: 820681647}
   - component: {fileID: 820681651}
+  - component: {fileID: 820681652}
+  - component: {fileID: 820681647}
   m_Layer: 0
   m_Name: Hiding_Spot
   m_TagString: HidingSpot
@@ -2076,6 +2077,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7148ea688010bad4e890a0b81a66b30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 57763850}
+--- !u!95 &820681652
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 820681646}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 66be72d275d7c6240919f891c6af7313, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &852636620
 GameObject:
   m_ObjectHideFlags: 0
@@ -2641,6 +2660,7 @@ MonoBehaviour:
   - {fileID: 2108982493}
   - {fileID: 1905868928}
   - {fileID: 346585307}
+  - {fileID: 820681646}
   bpm: 100
 --- !u!82 &1766924951
 AudioSource:
