@@ -32,46 +32,50 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             if (isOffBeat())
             {
                 UIManager.instance.DropCombo();
+                SoundManager.instance.failSound();
             }
             else
             {
                 UIManager.instance.IncrementCombo();
-            }
+                float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
 
-            float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
-
-            if (moveHorizontal > 0)
-            {
-                moveHorizontal = 1.0f;
-            }
-            else if (moveHorizontal < 0)
-            {
-                moveHorizontal = -1.0f;
-            }
-
-            Vector3 velocity = new Vector3(tileSize * moveHorizontal, 0, 0);
-
-            RaycastHit2D[] results = new RaycastHit2D[4];
-            player_c.Raycast(new Vector2(moveHorizontal, 0),results,tileSize);
-
-            bool collision = false;
-            foreach (RaycastHit2D hit in results)
-            {
-                if (hit.collider != null)
+                if (moveHorizontal > 0)
                 {
-                    if (!hit.collider.gameObject.CompareTag("SightCone"))
+                    moveHorizontal = 1.0f;
+                }
+                else if (moveHorizontal < 0)
+                {
+                    moveHorizontal = -1.0f;
+                }
+
+                Vector3 velocity = new Vector3(tileSize * moveHorizontal, 0, 0);
+
+                RaycastHit2D[] results = new RaycastHit2D[4];
+                player_c.Raycast(new Vector2(moveHorizontal, 0),results,tileSize);
+
+                bool collision = false;
+                foreach (RaycastHit2D hit in results)
+                {
+                    if (hit.collider != null)
                     {
-                        collision = true;
-                        UIManager.instance.DropCombo();
-                        break;
+                        if (!hit.collider.gameObject.CompareTag("SightCone"))
+                        {
+                            collision = true;
+                            break;
+                        }
                     }
+                }
+
+                if (!collision)
+                {
+                    player_t.position += velocity;
+                }
+                else {
+                    UIManager.instance.DropCombo();
+                    SoundManager.instance.failSound();
                 }
             }
 
-            if (!collision)
-            {
-                player_t.position += velocity;
-            }
         }
 
         else if (Input.GetButtonDown("Vertical"))
@@ -80,45 +84,50 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             if (isOffBeat())
             {
                 UIManager.instance.DropCombo();
+                SoundManager.instance.failSound();
             }
             else
             {
                 UIManager.instance.IncrementCombo();
-            }
+                float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
 
-            float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
-
-            if (moveVertical > 0)
-            {
-                moveVertical = 1.0f;
-            }
-            else if (moveVertical < 0)
-            {
-                moveVertical = -1.0f;
-            }
-            Vector3 velocity = new Vector3(0, tileSize * moveVertical, 0);
-
-            RaycastHit2D[] results = new RaycastHit2D[4];
-            player_c.Raycast(new Vector2(0,moveVertical), results, tileSize);
-
-            bool collision = false;
-            foreach (RaycastHit2D hit in results)
-            {
-                if (hit.collider != null)
+                if (moveVertical > 0)
                 {
-                    if (!hit.collider.gameObject.CompareTag("SightCone"))
+                    moveVertical = 1.0f;
+                }
+                else if (moveVertical < 0)
+                {
+                    moveVertical = -1.0f;
+                }
+                Vector3 velocity = new Vector3(0, tileSize * moveVertical, 0);
+
+                RaycastHit2D[] results = new RaycastHit2D[4];
+                player_c.Raycast(new Vector2(0,moveVertical), results, tileSize);
+
+                bool collision = false;
+                foreach (RaycastHit2D hit in results)
+                {
+                    if (hit.collider != null)
                     {
-                        collision = true;
-                        UIManager.instance.DropCombo();
-                        break;
+                        if (!hit.collider.gameObject.CompareTag("SightCone"))
+                        {
+                            collision = true;
+                            break;
+                        }
                     }
+                }
+
+                if (!collision)
+                {
+                    player_t.position += velocity;
+                }
+                else
+                {
+                    UIManager.instance.DropCombo();
+                    SoundManager.instance.failSound();
                 }
             }
 
-            if (!collision)
-            {
-                player_t.position += velocity;
-            }
         }
 
 

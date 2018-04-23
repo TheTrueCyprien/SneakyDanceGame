@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class SoundManager : MonoBehaviour {
 
+    public static SoundManager instance;
+
     public GameObject[] Listeners;
 
     //the current position of the song (in seconds)
@@ -22,11 +24,20 @@ public class SoundManager : MonoBehaviour {
     //beats per minute of a song
     public float bpm = 100;
 
-    //keep all the position-in-beats of notes in the song
-    private float[] notes;
-
     //beatsteps at which an update is triggered
     private int nextIndex = 0;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Use this for initialization
     void Start () {
@@ -37,7 +48,10 @@ public class SoundManager : MonoBehaviour {
         dsptimesong = (float)AudioSettings.dspTime;
 
         //start the song
-        GetComponent<AudioSource>().Play();
+        foreach (AudioSource child in GetComponentsInChildren<AudioSource>()) if (child.CompareTag("Master-Audio"))
+            {
+                child.Play();
+            }
 
         foreach (GameObject Listener in Listeners)
         {
@@ -60,5 +74,9 @@ public class SoundManager : MonoBehaviour {
             }
             nextIndex++;
         }
+    }
+
+    public void failSound() {
+        GetComponent<AudioSource>().Play();
     }
 }
