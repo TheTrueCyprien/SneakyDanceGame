@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour, IRythmMessageTarget
             case 100:
                 comboDescription.text = "Amazing";
                 break;
-            case 200:
+            case 150:
                 comboDescription.text = "Stunning";
                 break;
         }

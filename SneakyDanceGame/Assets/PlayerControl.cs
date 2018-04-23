@@ -25,6 +25,10 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     // Update is called once per frame
     void Update () {
 
+        AnimationClip current_anim = player_anim.GetCurrentAnimatorClipInfo(0)[0].clip;
+        player_anim.speed = current_anim.length / beatDeltaTime;
+        player_anim.ResetTrigger("onBeat");
+
         if (Input.GetButtonDown("Horizontal"))
         {
             beatSkipped = false;
@@ -35,6 +39,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             else
             {
                 UIManager.instance.IncrementCombo();
+                player_anim.SetInteger("combo", player_anim.GetInteger("combo") + 1);
                 float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
 
                 if (moveHorizontal > 0)
@@ -85,6 +90,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             else
             {
                 UIManager.instance.IncrementCombo();
+                player_anim.SetInteger("combo", player_anim.GetInteger("combo")+1);
                 float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
 
                 if (moveVertical > 0)
@@ -130,6 +136,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             if (beatSkipped)
             {
                 UIManager.instance.DropCombo();
+                player_anim.SetInteger("combo", 0);
             }
             comboVerified = true;
             beatSkipped = true;
@@ -140,6 +147,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
         UIManager.instance.DropCombo();
         SoundManager.instance.failSound();
         player_anim.SetTrigger("stumble");
+        player_anim.SetInteger("combo", 0);
     }
 
     private bool isOffBeat() {
@@ -150,9 +158,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 
     public void OnBeat(int index)
     {
-        AnimationClip current_anim = player_anim.GetCurrentAnimatorClipInfo(0)[0].clip;
-        float stepsize = 1f/(current_anim.frameRate * current_anim.length);
-        player_anim.SetFloat("normalTime", (player_anim.GetFloat("normalTime") + stepsize) % 1f);
+        player_anim.SetTrigger("onBeat");
         lastBeatTime = Time.time;
         comboVerified = false;
     }
