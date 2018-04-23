@@ -17,8 +17,7 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
 
     private float tileSize = 32.0f;
     private float secPerBeat;
-
-
+    
     // Use this for initialization
     void Start() {
         route_array = route.ToCharArray();

@@ -15,12 +15,11 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     public float tileSize = 32.0f;
     public float offbeatTolerance = 0.15f;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         player_t = GetComponent<Transform>();
         player_c = GetComponent<BoxCollider2D>();
         player_anim = GetComponent<Animator>();
-
     }
 
     // Update is called once per frame
@@ -31,8 +30,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             beatSkipped = false;
             if (isOffBeat())
             {
-                UIManager.instance.DropCombo();
-                SoundManager.instance.failSound();
+                stumble();
             }
             else
             {
@@ -71,8 +69,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
                     player_t.position += velocity;
                 }
                 else {
-                    UIManager.instance.DropCombo();
-                    SoundManager.instance.failSound();
+                    stumble();
                 }
             }
 
@@ -83,8 +80,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             beatSkipped = false;
             if (isOffBeat())
             {
-                UIManager.instance.DropCombo();
-                SoundManager.instance.failSound();
+                stumble();
             }
             else
             {
@@ -123,8 +119,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
                 }
                 else
                 {
-                    UIManager.instance.DropCombo();
-                    SoundManager.instance.failSound();
+                    stumble();
                 }
             }
 
@@ -139,6 +134,12 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
             comboVerified = true;
             beatSkipped = true;
         }
+    }
+
+    private void stumble() {
+        UIManager.instance.DropCombo();
+        SoundManager.instance.failSound();
+        player_anim.SetTrigger("stumble");
     }
 
     private bool isOffBeat() {

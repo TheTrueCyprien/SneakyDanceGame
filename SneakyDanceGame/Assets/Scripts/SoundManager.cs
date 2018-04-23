@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour {
 
     public static SoundManager instance;
 
-    public GameObject[] Listeners;
+    public List<GameObject> Listeners;
 
     //the current position of the song (in seconds)
     private float songPosition;

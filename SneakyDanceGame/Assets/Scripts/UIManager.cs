@@ -28,13 +28,8 @@ public class UIManager : MonoBehaviour, IRythmMessageTarget
         }
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         if (Time.time - lastBeat > beatDeltaTime * 0.15) {
             screenBorder.SetActive(false);
         }
