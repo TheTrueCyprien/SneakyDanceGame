@@ -10,6 +10,7 @@ TagManager:
   - Master-Audio
   - AudioController
   - AudioChannel
+  - HidingSpot
   layers:
   - Default
   - TransparentFX
