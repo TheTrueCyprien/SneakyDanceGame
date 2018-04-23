@@ -9,6 +9,7 @@ TagManager:
   - SightCone
   - Master-Audio
   - AudioController
+  - HidingSpot
   layers:
   - Default
   - TransparentFX

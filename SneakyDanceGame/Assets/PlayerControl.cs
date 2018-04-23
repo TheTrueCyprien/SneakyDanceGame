@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 public class PlayerControl : MonoBehaviour, IRythmMessageTarget
 {
 
@@ -61,6 +62,11 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
                 {
                     if (hit.collider != null)
                     {
+						if (hit.collider.gameObject.CompareTag ("HidingSpot")) {
+							ExecuteEvents.Execute<IHideMessage>(hit.collider.gameObject, null, (x, y) => x.hide(gameObject));
+							break;
+						}
+
                         if (!hit.collider.gameObject.CompareTag("SightCone"))
                         {
                             collision = true;
@@ -111,6 +117,11 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
                 {
                     if (hit.collider != null)
                     {
+						if (hit.collider.gameObject.CompareTag ("HidingSpot")) {
+							ExecuteEvents.Execute<IHideMessage>(hit.collider.gameObject, null, (x, y) => x.hide(gameObject));
+							break;
+						}
+
                         if (!hit.collider.gameObject.CompareTag("SightCone"))
                         {
                             collision = true;
