@@ -1,3 +1,3 @@
 # SneakyDanceGame
 
-Try it out the demo at https://thetruecyprien.github.io/SneakyDanceGame/ (WIP desynchs after a while)
+Try out the demo at https://thetruecyprien.github.io/SneakyDanceGame/ (still WIP, desynchs after a while)
