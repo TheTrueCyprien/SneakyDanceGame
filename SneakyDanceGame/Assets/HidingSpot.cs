@@ -7,19 +7,20 @@ public class HidingSpot : MonoBehaviour, IHideMessage, IRythmMessageTarget {
 	private Animator hide_anim;
 	private float beatDeltaTime;
 
-	public GameObject player;
+	private GameObject player;
 	private Vector3 pos;
 	private bool isHiding;
 	private int hidingCounter;
 
 	public void Start() {
-		isHiding = false;
+        hide_anim = gameObject.GetComponent<Animator>();
+        player = GameObject.Find("player");
+        isHiding = false;
 	}
 
 	public void Update() {
-		//AnimationClip current_anim = hide_anim.GetCurrentAnimatorClipInfo(0)[0].clip;
-		//hide_anim.speed = current_anim.length / beatDeltaTime;
-		//hide_anim.ResetTrigger("onBeat");
+		AnimationClip current_anim = hide_anim.GetCurrentAnimatorClipInfo(0)[0].clip;
+		hide_anim.speed = current_anim.length / beatDeltaTime;
 	}
 
 	public void hide(GameObject p) {
@@ -30,22 +31,26 @@ public class HidingSpot : MonoBehaviour, IHideMessage, IRythmMessageTarget {
 			player.GetComponent<BoxCollider2D> ().enabled = false;
 			hidingCounter = 3;
 			isHiding = true;
+            hide_anim.SetBool("hiding", true);
 		}
 	}
 
 	public void OnBeat(int index)
 	{
 		//hide_anim.SetTrigger("onBeat");
-		hidingCounter--;
-		if (hidingCounter == 0) {
-			print("show yourself!");
-			player.GetComponent<SpriteRenderer>().enabled = true;
-			player.GetComponent<BoxCollider2D>().enabled = true;
-			isHiding = false;
+        if (isHiding)
+        {
+		    hidingCounter--;
+		    if (hidingCounter == 0) {
+			    player.GetComponent<SpriteRenderer>().enabled = true;
+			    player.GetComponent<BoxCollider2D>().enabled = true;
+                hide_anim.SetBool("hiding", false);
 
-			//evict player
-			player.transform.position = pos;
-		}
+                //evict player
+                player.transform.position = pos;
+		    }
+
+        }
 	}
 
 	public void SongStarted(float secPerBeat) {

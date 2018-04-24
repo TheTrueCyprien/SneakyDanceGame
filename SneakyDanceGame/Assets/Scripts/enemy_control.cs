@@ -165,7 +165,11 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
         
         if (collision.gameObject == player)
         {
-            print("Zugriff!");
+            //int layerMask = 1 << 9;
+            //RaycastHit2D hit = Physics2D.Raycast(gameObject.GetComponent<BoxCollider2D>().bounds.center, player.GetComponent<BoxCollider2D>().bounds.center, Mathf.Infinity, layerMask);
+            //if (hit.collider != null && hit.collider.gameObject == player) {
+                UIManager.instance.playerSpotted();
+            //}
         }
     }
 }
