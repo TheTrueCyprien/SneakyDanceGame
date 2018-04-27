@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     private float beatDeltaTime;
     private bool beatSkipped = true;
     private bool comboVerified = false;
+    private bool visible = true;
 
     public float tileSize = 32.0f;
     public float offbeatTolerance = 0.15f;
@@ -30,127 +31,126 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
         player_anim.speed = current_anim.length / beatDeltaTime;
         player_anim.ResetTrigger("onBeat");
 
-        if (Input.GetButtonDown("Horizontal"))
-        {
-            beatSkipped = false;
-            if (isOffBeat())
+        if (player_c.enabled) {
+
+            if (Input.GetButtonDown("Horizontal"))
             {
-                stumble();
-            }
-            else
-            {
-                UIManager.instance.IncrementCombo();
-                player_anim.SetInteger("combo", player_anim.GetInteger("combo") + 1);
-                float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
-
-                if (moveHorizontal > 0)
+                beatSkipped = false;
+                if (isOffBeat())
                 {
-                    moveHorizontal = 1.0f;
-                }
-                else if (moveHorizontal < 0)
-                {
-                    moveHorizontal = -1.0f;
-                }
-
-                Vector3 velocity = new Vector3(tileSize * moveHorizontal, 0, 0);
-
-                RaycastHit2D[] results = new RaycastHit2D[4];
-                player_c.Raycast(new Vector2(moveHorizontal, 0),results,tileSize);
-
-                bool collision = false;
-                foreach (RaycastHit2D hit in results)
-                {
-                    if (hit.collider != null)
-                    {
-						if (hit.collider.gameObject.CompareTag ("HidingSpot")) {
-							ExecuteEvents.Execute<IHideMessage>(hit.collider.gameObject, null, (x, y) => x.hide(gameObject));
-							break;
-						}
-
-                        if (!hit.collider.gameObject.CompareTag("SightCone"))
-                        {
-                            collision = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!collision)
-                {
-                    player_t.position += velocity;
-                }
-                else {
                     stumble();
-                }
-            }
-
-        }
-
-        else if (Input.GetButtonDown("Vertical"))
-        {
-            beatSkipped = false;
-            if (isOffBeat())
-            {
-                stumble();
-            }
-            else
-            {
-                UIManager.instance.IncrementCombo();
-                player_anim.SetInteger("combo", player_anim.GetInteger("combo")+1);
-                float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
-
-                if (moveVertical > 0)
-                {
-                    moveVertical = 1.0f;
-                }
-                else if (moveVertical < 0)
-                {
-                    moveVertical = -1.0f;
-                }
-                Vector3 velocity = new Vector3(0, tileSize * moveVertical, 0);
-
-                RaycastHit2D[] results = new RaycastHit2D[4];
-                player_c.Raycast(new Vector2(0,moveVertical), results, tileSize);
-
-                bool collision = false;
-                foreach (RaycastHit2D hit in results)
-                {
-                    if (hit.collider != null)
-                    {
-						if (hit.collider.gameObject.CompareTag ("HidingSpot")) {
-							ExecuteEvents.Execute<IHideMessage>(hit.collider.gameObject, null, (x, y) => x.hide(gameObject));
-							break;
-						}
-
-                        if (!hit.collider.gameObject.CompareTag("SightCone"))
-                        {
-                            collision = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!collision)
-                {
-                    player_t.position += velocity;
                 }
                 else
                 {
+                    UIManager.instance.IncrementCombo();
+                    player_anim.SetInteger("combo", player_anim.GetInteger("combo") + 1);
+                    float moveHorizontal = Mathf.Round(Input.GetAxisRaw("Horizontal"));
+
+                    if (moveHorizontal > 0)
+                    {
+                        moveHorizontal = 1.0f;
+                    }
+                    else if (moveHorizontal < 0)
+                    {
+                        moveHorizontal = -1.0f;
+                    }
+
+                    Vector3 velocity = new Vector3(tileSize * moveHorizontal, 0, 0);
+
+                    RaycastHit2D[] results = new RaycastHit2D[4];
+                    player_c.Raycast(new Vector2(moveHorizontal, 0),results,tileSize);
+
+                    bool collision = false;
+                    foreach (RaycastHit2D hit in results)
+                    {
+                        if (hit.collider != null)
+                        {
+						    if (hit.collider.gameObject.CompareTag ("HidingSpot")) {
+							    ExecuteEvents.Execute<IHideMessage>(hit.collider.gameObject, null, (x, y) => x.hide(gameObject));
+							    break;
+						    }
+                            collision = true;
+                            break;
+                        }
+                    }
+
+                    if (!collision)
+                    {
+                        player_t.position += velocity;
+                    }
+                    else {
+                        stumble();
+                    }
+                }
+
+            }
+
+            else if (Input.GetButtonDown("Vertical"))
+            {
+                beatSkipped = false;
+                if (isOffBeat())
+                {
                     stumble();
                 }
+                else
+                {
+                    UIManager.instance.IncrementCombo();
+                    player_anim.SetInteger("combo", player_anim.GetInteger("combo")+1);
+                    float moveVertical = Mathf.Round(Input.GetAxisRaw("Vertical"));
+
+                    if (moveVertical > 0)
+                    {
+                        moveVertical = 1.0f;
+                    }
+                    else if (moveVertical < 0)
+                    {
+                        moveVertical = -1.0f;
+                    }
+                    Vector3 velocity = new Vector3(0, tileSize * moveVertical, 0);
+
+                    RaycastHit2D[] results = new RaycastHit2D[4];
+                    player_c.Raycast(new Vector2(0,moveVertical), results, tileSize);
+
+                    bool collision = false;
+                    foreach (RaycastHit2D hit in results)
+                    {
+                        if (hit.collider != null)
+                        {
+						    if (hit.collider.gameObject.CompareTag ("HidingSpot")) {
+							    ExecuteEvents.Execute<IHideMessage>(hit.collider.gameObject, null, (x, y) => x.hide(gameObject));
+							    break;
+						    }
+
+                            if (!hit.collider.gameObject.CompareTag("SightCone"))
+                            {
+                                collision = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!collision)
+                    {
+                        player_t.position += velocity;
+                    }
+                    else
+                    {
+                        stumble();
+                    }
+                }
+
             }
 
-        }
 
-
-        if (UIManager.instance.combo > 0 && !comboVerified && (Time.time - lastBeatTime > beatDeltaTime * offbeatTolerance)) {
-            if (beatSkipped)
-            {
-                UIManager.instance.DropCombo();
-                player_anim.SetInteger("combo", 0);
+            if (UIManager.instance.combo > 0 && !comboVerified && (Time.time - lastBeatTime > beatDeltaTime * offbeatTolerance)) {
+                if (beatSkipped)
+                {
+                    UIManager.instance.DropCombo();
+                    player_anim.SetInteger("combo", 0);
+                }
+                comboVerified = true;
+                beatSkipped = true;
             }
-            comboVerified = true;
-            beatSkipped = true;
         }
     }
 
@@ -177,5 +177,13 @@ public class PlayerControl : MonoBehaviour, IRythmMessageTarget
     public void SongStarted(float secPerBeat)
     {
         beatDeltaTime = secPerBeat;
+    }
+
+    public void setVisible(bool visibility) {
+        visible = visibility;
+    }
+
+    public bool isVisible() {
+        return visible;
     }
 }

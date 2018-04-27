@@ -28,7 +28,7 @@ public class DynamicSightCone : MonoBehaviour {
     private void Update()
     {
         float distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance <= radius && Vector2.Angle(-transform.up, player.transform.position - transform.position) <= fov/2f)
+        if (distance <= radius && Vector2.Angle(-transform.up, player.transform.position - transform.position) <= fov/2f && player.GetComponent<BoxCollider2D>().enabled)
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, (player.transform.position - transform.position), distance, 1 << 8);
             if (hit.collider == null) {
