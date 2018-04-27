@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget {
 
     public string route;
@@ -10,6 +11,7 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
     private BoxCollider2D npc_c;
     private Transform npc_cone;
     private Animator npc_anim;
+    private string last_anim_trigger;
 
     int pattern_count = 0;
 
@@ -43,19 +45,6 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
         MoveRoute();   
     }
 
-    void setAnimation(string trigger) {
-        foreach (string animation in new string[] { "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "IdleLeft", "IdleRight", "IdleUp", "IdleDown" })
-        {
-            if (animation == trigger) {
-                npc_anim.SetTrigger(trigger);
-            }
-            else {
-                npc_anim.ResetTrigger(animation);
-            }
-
-        }
-    }
-
     void MoveRoute()
     {
         Vector3 velocity = new Vector3(0, 0, 0);
@@ -68,8 +57,11 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
             velocity = new Vector3(0, -1.0f * tileSize, 0);
             rotation = new Vector3(0, 0, 0);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(0, -32, 0);
-            npc_anim.SetTrigger("MoveDown");
+            if(last_anim_trigger != "MoveDown")
+            {
+                npc_anim.SetTrigger("MoveDown");
+                last_anim_trigger = "MoveDown";
+            }
 
             npc_c.Raycast(new Vector2(0, -1.0f), results, tileSize);
         }
@@ -78,8 +70,11 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
             velocity = new Vector3(0, 1.0f * tileSize, 0);
             rotation = new Vector3(0, 0, 180);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(0, 32, 0);
-            npc_anim.SetTrigger("MoveUp");
+            if (last_anim_trigger != "MoveUp")
+            {
+                npc_anim.SetTrigger("MoveUp");
+                last_anim_trigger = "MoveUp";
+            }
 
             npc_c.Raycast(new Vector2(0, 1.0f), results, tileSize);
         }
@@ -88,8 +83,11 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
             velocity = new Vector3(-1.0f * tileSize, 0, 0);
             rotation = new Vector3(0, 0, 270);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(-32, 0, 0);
-            npc_anim.SetTrigger("MoveLeft");
+            if (last_anim_trigger != "MoveLeft")
+            {
+                npc_anim.SetTrigger("MoveLeft");
+                last_anim_trigger = "MoveLeft";
+            }
 
             npc_c.Raycast(new Vector2(-1.0f, 0), results, tileSize);
         }
@@ -98,37 +96,52 @@ public class enemy_control : MonoBehaviour, OnConeCollision, IRythmMessageTarget
             velocity = new Vector3(1.0f * tileSize, 0, 0);
             rotation = new Vector3(0, 0, 90);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(32, 0, 0);
 
             npc_c.Raycast(new Vector2(1.0f, 0), results, tileSize);
-            npc_anim.SetTrigger("MoveRight");
+            if (last_anim_trigger != "MoveRight")
+            {
+                npc_anim.SetTrigger("MoveRight");
+                last_anim_trigger = "MoveRight";
+            }
         } else if (route[pattern_count] == '2')
         {
             rotation = new Vector3(0, 0, 0);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(0, -32, 0);
-            npc_anim.SetTrigger("IdleDown");
+            if (last_anim_trigger != "IdleDown")
+            {
+                npc_anim.SetTrigger("IdleDown");
+                last_anim_trigger = "IdleDown";
+            }
         }
         else if (route[pattern_count] == '8')
         {
             rotation = new Vector3(0, 0, 180);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(0, 32, 0);
-            npc_anim.SetTrigger("IdleUp");
+            if (last_anim_trigger != "IdleUp")
+            {
+                npc_anim.SetTrigger("IdleUp");
+                last_anim_trigger = "IdleUp";
+            }
         }
         else if (route[pattern_count] == '4')
         {
             rotation = new Vector3(0, 0, 270);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(-32, 0, 0);
-            npc_anim.SetTrigger("IdleLeft");
+            if (last_anim_trigger != "IdleLeft")
+            {
+                npc_anim.SetTrigger("IdleLeft");
+                last_anim_trigger = "IdleLeft";
+            }
         }
         else if (route[pattern_count] == '6')
         {
             rotation = new Vector3(0, 0, 90);
             rotation = rotation - npc_cone.rotation.eulerAngles;
-            npc_cone.localPosition = new Vector3(32, 0, 0);
-            npc_anim.SetTrigger("IdleRight");
+            if (last_anim_trigger != "IdleRight")
+            {
+                npc_anim.SetTrigger("IdleRight");
+                last_anim_trigger = "IdleRight";
+            }
         }
 
         npc_cone.Rotate(rotation, Space.World);
