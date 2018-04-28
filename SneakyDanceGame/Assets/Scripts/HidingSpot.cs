@@ -33,9 +33,10 @@ public class HidingSpot : MonoBehaviour, IHideMessage, IRythmMessageTarget {
 			//deactivate player components
 			player.GetComponent<SpriteRenderer> ().enabled = false;
 			player.GetComponent<BoxCollider2D> ().enabled = false;
+            Vector3 camerafocus = main_camera.localPosition;
             main_camera.SetParent(transform);
-            main_camera.localPosition = new Vector3(0,0,-10);
-			hidingCounter = 3;
+            main_camera.localPosition = camerafocus;
+            hidingCounter = 3;
 			isHiding = true;
             hide_anim.SetBool("hiding", true);
 		}
@@ -47,12 +48,13 @@ public class HidingSpot : MonoBehaviour, IHideMessage, IRythmMessageTarget {
         {
 		    hidingCounter--;
 		    if (hidingCounter == 0) {
-			    player.GetComponent<SpriteRenderer>().enabled = true;
-			    player.GetComponent<BoxCollider2D>().enabled = true;
+                player.GetComponent<SpriteRenderer>().enabled = true;
+                player.GetComponent<BoxCollider2D>().enabled = true;
                 hide_anim.SetBool("hiding", false);
                 isHiding = false;
+                Vector3 camerafocus = main_camera.localPosition;
                 main_camera.SetParent(player.transform);
-                main_camera.localPosition = new Vector3(0, 0, -10);
+                main_camera.localPosition = camerafocus;
 
                 //evict player
                 player.transform.position = pos;
